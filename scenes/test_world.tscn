@@ -1,0 +1,104 @@
+[gd_scene load_steps=13 format=3 uid="uid://p8eqyb3lkbl6"]
+
+[ext_resource type="Texture2D" uid="uid://b5a8e25w7y30g" path="res://assets/texture_01.png" id="1_amxg5"]
+[ext_resource type="Texture2D" uid="uid://d1iiwse3c5yqx" path="res://assets/rogland_clear_night_4k.exr" id="2_3263u"]
+[ext_resource type="PackedScene" uid="uid://cgxwhigt1wp74" path="res://scenes/player.tscn" id="3_3263u"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dsnr4"]
+albedo_texture = ExtResource("1_amxg5")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lf0gk"]
+albedo_texture = ExtResource("1_amxg5")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_amxg5"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cnaw2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3263u"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_umbte"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kt6p6"]
+panorama = ExtResource("2_3263u")
+
+[sub_resource type="Sky" id="Sky_uu1iw"]
+sky_material = SubResource("PanoramaSkyMaterial_kt6p6")
+
+[sub_resource type="Environment" id="Environment_4tg7h"]
+background_mode = 2
+sky = SubResource("Sky_uu1iw")
+glow_enabled = true
+glow_intensity = 1.22
+glow_bloom = 0.01
+glow_blend_mode = 0
+
+[node name="test_world" type="Node3D"]
+
+[node name="test_floor" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="floor" type="CSGBox3D" parent="test_floor"]
+size = Vector3(1000, 1, 1000)
+material = SubResource("StandardMaterial3D_dsnr4")
+
+[node name="pole" type="CSGCylinder3D" parent="test_floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material = SubResource("StandardMaterial3D_lf0gk")
+
+[node name="pole3" type="CSGCylinder3D" parent="test_floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -2.49818)
+height = 4.0
+material = SubResource("StandardMaterial3D_lf0gk")
+
+[node name="pole2" type="CSGCylinder3D" parent="test_floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.49024)
+material = SubResource("StandardMaterial3D_lf0gk")
+
+[node name="lights" type="Node3D" parent="."]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 3.61726, 2.3942)
+material_override = SubResource("StandardMaterial3D_amxg5")
+mesh = SubResource("SphereMesh_cnaw2")
+skeleton = NodePath("../..")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="lights/MeshInstance3D2"]
+transform = Transform3D(4, 0, 0, 0, 4.76995e-08, 4, 0, -4, 4.76995e-08, 0, -0.324679, -0.149133)
+light_color = Color(0, 0, 1, 1)
+light_energy = 25.0
+spot_angle = 24.9569
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 4.79708, -2.44547)
+material_override = SubResource("StandardMaterial3D_3263u")
+mesh = SubResource("SphereMesh_cnaw2")
+skeleton = NodePath("../..")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="lights/MeshInstance3D3"]
+transform = Transform3D(4, 0, 0, 0, 4.76995e-08, 4, 0, -4, 4.76995e-08, 0, -0.324679, -0.149133)
+light_color = Color(0, 1, 0, 1)
+light_energy = 25.0
+spot_angle = 24.9569
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 4.11665, 0.068485)
+material_override = SubResource("StandardMaterial3D_umbte")
+mesh = SubResource("SphereMesh_cnaw2")
+skeleton = NodePath("../..")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="lights/MeshInstance3D"]
+transform = Transform3D(4, 0, 0, 0, 4.76995e-08, 4, 0, -4, 4.76995e-08, 0, -0.324679, -0.149133)
+light_color = Color(1, 0, 0, 1)
+light_energy = 25.0
+spot_angle = 24.9569
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4tg7h")
+
+[node name="player" parent="." instance=ExtResource("3_3263u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.25152)
