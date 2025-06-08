@@ -23,19 +23,27 @@ albedo_color = Color(0, 1, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_umbte"]
 albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kt6p6"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_3263u"]
 panorama = ExtResource("2_3263u")
 
 [sub_resource type="Sky" id="Sky_uu1iw"]
-sky_material = SubResource("PanoramaSkyMaterial_kt6p6")
+sky_material = SubResource("PanoramaSkyMaterial_3263u")
 
 [sub_resource type="Environment" id="Environment_4tg7h"]
 background_mode = 2
 sky = SubResource("Sky_uu1iw")
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
 glow_enabled = true
 glow_intensity = 1.22
 glow_bloom = 0.01
 glow_blend_mode = 0
+fog_light_color = Color(0.146968, 0.163429, 0.189308, 1)
+fog_sun_scatter = 0.63
+fog_sky_affect = 0.694
+volumetric_fog_density = 0.1382
 
 [node name="test_world" type="Node3D"]
 
@@ -100,5 +108,9 @@ spot_angle = 24.9569
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_4tg7h")
 
+[node name="sun" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.0537999, 0.998552, 0, -0.998552, 0.0537999, 0, 0, 0)
+light_energy = 0.75
+
 [node name="player" parent="." instance=ExtResource("3_3263u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.25152)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.75294, 4.09676)

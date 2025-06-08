@@ -21,6 +21,7 @@ var direction = Vector3.ZERO
 var crouching_depth = -0.5
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var flying = false
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -33,6 +34,7 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("crouch"):
+		print("crouch")
 		current_speed = crouching_speed
 		head.position.y = lerp(head.position.y,1.8 + crouching_depth,delta*lerp_speed)
 		standing_collision_shape.disabled = true
@@ -47,18 +49,22 @@ func _physics_process(delta: float) -> void:
 		else:
 			current_speed = walking_speed
 	
+	if Input.is_action_just_pressed("fly"):
+		flying = !flying
+	
 	if not is_on_floor():
-		velocity.y -= gravity * delta
-		if Input.is_action_just_pressed("jump") and is_on_floor():
-			velocity.y = jump_velocity
+		if !flying:
+			velocity.y -= gravity * delta
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = jump_velocity
 		
-		var input_dir = Input.get_vector("left", "right", "forward", "backward")
-		direction = lerp(direction,(transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(),delta*lerp_speed)
-		if direction:
-			velocity.x = direction.x * current_speed
-			velocity.z = direction.z * current_speed
-		else:
-			velocity.x = move_toward(velocity.x, 0, current_speed)
-			velocity.z = move_toward(velocity.z, 0, current_speed)
-			
-		move_and_slide()
+	var input_dir = Input.get_vector("left", "right", "forward", "backward")
+	direction = lerp(direction,(transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(),delta*lerp_speed)
+	if direction:
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
+		
+	move_and_slide()
